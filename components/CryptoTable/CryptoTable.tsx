@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 
 import { Cryptocurrency } from '../../types/cryptocurrency';
-import { formatCurrency, formatNumber } from '../../helpers/format';
+import { formatLargeNumber, formatNumber } from '../../helpers/format';
 import PriceChangePercentText from '../PriceChangePercentText';
 
 export interface Props {
@@ -53,9 +53,9 @@ const CryptoTable: FC<Props> = ({
                             <Td isNumeric>
                                 <PriceChangePercentText priceChangePercent={crypto.priceChangePercentage24h} />
                             </Td>
-                            <Td isNumeric>{`A$${formatCurrency(crypto.totalVolume)}`}</Td>
-                            <Td isNumeric>{`A$${formatCurrency(crypto.marketCap)}`}</Td>
-                            <Td isNumeric>{formatCurrency(crypto.circulatingSupply)}</Td>
+                            <Td isNumeric>{`A$${formatLargeNumber(crypto.totalVolume)}`}</Td>
+                            <Td isNumeric>{`A$${formatLargeNumber(crypto.marketCap)}`}</Td>
+                            <Td isNumeric>{formatLargeNumber(crypto.circulatingSupply)}</Td>
                         </Tr>
                     ))}
                 </Tbody>
