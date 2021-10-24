@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-import { Box } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import { formatLargeNumber } from "../../../helpers/format";
 
 interface Props {
@@ -9,7 +9,7 @@ interface Props {
 }
 
 const LargeNumberCell: FC<Props> = ({ value, isCurrency = false }) => (
-  <Box>{`${isCurrency ? "A$" : ""}${formatLargeNumber(value)}`}</Box>
+  <Text>{`${isCurrency ? "A$" : ""}${formatLargeNumber(value)}`}</Text>
 );
 
 export default LargeNumberCell;

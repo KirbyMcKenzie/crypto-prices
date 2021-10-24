@@ -1,7 +1,18 @@
 // TODO: km - fix key warnings
 /* eslint-disable react/jsx-key */
 import React, { FC } from "react";
-import { useTable, usePagination, useSortBy } from "react-table";
+import {
+  useTable,
+  usePagination,
+  useSortBy,
+  Cell,
+  Row,
+  ColumnInstance,
+  TableRowProps,
+  TableCellProps,
+  TableProps,
+  Column,
+} from "react-table";
 import {
   Flex,
   Table,
@@ -28,48 +39,43 @@ import { Cryptocurrency } from "../../types/cryptocurrency";
 
 import NameCell from "./Cells/NameCell";
 import LargeNumberCell from "./Cells/LargeNumberCell";
-import CurrencyCell from "./Cells/CurrencyCell";
+import CurrentPriceCell from "./Cells/CurrentPriceCell";
 import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
 
 const columns = [
   {
-    Header: "Cryptocurrencies",
-    columns: [
-      {
-        Header: "Name",
-        accessor: "name",
-        Cell: NameCell,
-      },
-      {
-        Header: "Price",
-        accessor: "currentPrice",
-        Cell: CurrencyCell,
-      },
-      {
-        Header: "Change",
-        accessor: "priceChangePercentage24h",
-        Cell: PriceChangePercentCell,
-      },
-      {
-        Header: "Volume (24hr)",
-        accessor: "totalVolume",
-        Cell: (props: any) => (
-          <LargeNumberCell value={props.cell.value} isCurrency />
-        ),
-      },
-      {
-        Header: "Market Cap",
-        accessor: "marketCap",
-        Cell: (props: any) => (
-          <LargeNumberCell value={props.cell.value} isCurrency />
-        ),
-      },
-      {
-        Header: "Supply",
-        accessor: "circulatingSupply",
-        Cell: LargeNumberCell,
-      },
-    ],
+    Header: "Name",
+    accessor: "name",
+    Cell: NameCell,
+  },
+  {
+    Header: "Price",
+    accessor: "currentPrice",
+    Cell: CurrentPriceCell,
+  },
+  {
+    Header: "Change",
+    accessor: "priceChangePercentage24h",
+    Cell: PriceChangePercentCell,
+  },
+  {
+    Header: "Volume (24hr)",
+    accessor: "totalVolume",
+    Cell: (props: any) => (
+      <LargeNumberCell value={props.cell.value} isCurrency />
+    ),
+  },
+  {
+    Header: "Market Cap",
+    accessor: "marketCap",
+    Cell: (props: any) => (
+      <LargeNumberCell value={props.cell.value} isCurrency />
+    ),
+  },
+  {
+    Header: "Supply",
+    accessor: "circulatingSupply",
+    Cell: LargeNumberCell,
   },
 ];
 
@@ -110,13 +116,19 @@ const CryptoTable: FC<Props> = ({
   );
 
   return (
-    <Flex direction="column" height="100%" margin={12} width="100%">
+    <Flex direction="column" height="100%" width="100%">
       <Table {...getTableProps()}>
         <Thead>
           {headerGroups.map((headerGroup) => (
             <Tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
-                <Th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <Th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  _hover={{
+                    backgroundColor: "gray.50",
+                    transition: "200ms ease-in-out",
+                  }}
+                >
                   {column.render("Header")}
                   <chakra.span pl="1.5">
                     {column.isSorted &&
@@ -145,10 +157,18 @@ const CryptoTable: FC<Props> = ({
           {page.map((row, i) => {
             prepareRow(row);
             return (
-              <Tr {...row.getRowProps()}>
+              <Tr
+                {...row.getRowProps()}
+                _hover={{
+                  backgroundColor: "gray.50",
+                  transition: "200ms ease-in-out",
+                }}
+              >
                 {row.cells.map((cell) => {
                   return (
-                    <Td {...cell.getCellProps()}>{cell.render("Cell")}</Td>
+                    <Td fontWeight="medium" {...cell.getCellProps()}>
+                      {cell.render("Cell")}
+                    </Td>
                   );
                 })}
               </Tr>
