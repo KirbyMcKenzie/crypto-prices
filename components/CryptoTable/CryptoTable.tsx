@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import Image from 'next/image';
 import {
     Flex,
     Table,
@@ -6,10 +7,13 @@ import {
     Td,
     Th,
     Thead,
-    Tr
+    Tr,
+    Text
 } from '@chakra-ui/react';
-import { Cryptocurrency } from '../../types/cryptocurrency';
 
+import { Cryptocurrency } from '../../types/cryptocurrency';
+import { formatCurrency, formatNumber } from '../../helpers/format';
+import PriceChangePercentText from '../PriceChangePercentText';
 
 export interface Props {
     cryptocurrencies?: Cryptocurrency[];
@@ -38,12 +42,20 @@ const CryptoTable: FC<Props> = ({
                 <Tbody>
                     {cryptocurrencies.map((crypto) => (
                         <Tr key={crypto.id}>
-                            <Td>{crypto.name}</Td>
-                            <Td isNumeric>{crypto.currentPrice}</Td>
-                            <Td isNumeric>{crypto.priceChange24h}</Td>
-                            <Td isNumeric>{crypto.totalVolume}</Td>
-                            <Td isNumeric>{crypto.marketCap}</Td>
-                            <Td isNumeric>{crypto.totalSupply}</Td>
+                            <Td>
+                                <Flex alignItems="center">
+                                    <Image src={crypto.image} alt={`${crypto.name} logo`} height={32} width={32} />
+                                    <Text marginLeft={2} fontWeight="bold" isTruncated>{crypto.name}</Text>
+                                    <Text marginLeft={2} fontWeight="medium" color="gray.500" textTransform="uppercase">{crypto.symbol}</Text>
+                                </Flex>
+                            </Td>
+                            <Td isNumeric>{`A$${formatNumber(crypto.currentPrice)}`}</Td>
+                            <Td isNumeric>
+                                <PriceChangePercentText priceChangePercent={crypto.priceChangePercentage24h} />
+                            </Td>
+                            <Td isNumeric>{`A$${formatCurrency(crypto.totalVolume)}`}</Td>
+                            <Td isNumeric>{`A$${formatCurrency(crypto.marketCap)}`}</Td>
+                            <Td isNumeric>{formatCurrency(crypto.circulatingSupply)}</Td>
                         </Tr>
                     ))}
                 </Tbody>
