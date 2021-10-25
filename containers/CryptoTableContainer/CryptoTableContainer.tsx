@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 
 import CryptoTable from "../../components/CryptoTable";
 import useRequest from "../../hooks/useRequest";
@@ -8,17 +8,22 @@ const CryptoTableContainer: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [perPage, setPerPage] = useState<number>(10);
 
-  const { data, isValidating } = useRequest<Cryptocurrency[]>({
-    url: "/v3/coins/markets",
-    params: {
-      vs_currency: "AUD",
-      order: "market_cap_desc",
-      per_page: perPage,
-      page: currentPage + 1,
+  const { data, isValidating } = useRequest<Cryptocurrency[]>(
+    {
+      url: "/v3/coins/markets",
+      params: {
+        vs_currency: "AUD",
+        order: "market_cap_desc",
+        per_page: perPage,
+        page: currentPage + 1,
 
-      sparkline: false,
+        sparkline: false,
+      },
     },
-  });
+    {
+      refreshInterval: 10000,
+    }
+  );
 
   return (
     <CryptoTable
@@ -28,7 +33,7 @@ const CryptoTableContainer: FC = () => {
       perPage={perPage}
       onChangeCurrentPage={(newPage) => setCurrentPage(newPage)}
       onChangePerPage={(newPage) => setPerPage(newPage)}
-      maxPageCount={10}
+      maxPageCount={20}
     />
   );
 };

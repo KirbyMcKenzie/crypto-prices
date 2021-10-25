@@ -1,30 +1,5 @@
-// TODO: km - fix key warnings
-/* eslint-disable react/jsx-key */
 import React, { FC, useMemo } from "react";
-import { useTable, usePagination, useSortBy } from "react-table";
-import {
-  Fade,
-  Flex,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-  Text,
-  Tooltip,
-  IconButton,
-  Select,
-  chakra,
-  Skeleton,
-} from "@chakra-ui/react";
-
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  TriangleDownIcon,
-  TriangleUpIcon,
-} from "@chakra-ui/icons";
+import { Fade, Flex, Heading, Text, Spinner } from "@chakra-ui/react";
 
 import { Cryptocurrency } from "../../types/cryptocurrency";
 
@@ -32,10 +7,12 @@ import NameCell from "./Cells/NameCell";
 import LargeNumberCell from "./Cells/LargeNumberCell";
 import CurrentPriceCell from "./Cells/CurrentPriceCell";
 import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
+import Table from "../Table";
 
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
   isLoading?: boolean;
+  hasData?: boolean;
   error?: string;
   currentPage?: number;
   perPage?: number;
@@ -46,7 +23,8 @@ export interface Props {
 
 const CryptoTable: FC<Props> = ({
   cryptocurrencies = [],
-  isLoading = false,
+  isLoading = true,
+  hasData = false,
   error,
   currentPage = 1,
   perPage = 10,
@@ -96,167 +74,43 @@ const CryptoTable: FC<Props> = ({
 
   const data = React.useMemo(() => cryptocurrencies, [cryptocurrencies]);
 
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    setPageSize,
-    state: { pageIndex },
-  } = useTable(
-    {
-      columns,
-      data,
-      useControlledState: (state) => {
-        return React.useMemo(
-          () => ({
-            ...state,
-            pageIndex: currentPage,
-          }),
-          [state, currentPage]
-        );
-      },
-      initialState: { pageIndex: currentPage },
-      manualPagination: true,
-      pageCount: maxPageCount,
-      autoResetSortBy: false,
-      autoResetPage: false,
-    },
-    useSortBy,
-    usePagination
-  );
-
   return (
-    <Flex direction="column" height="100%" width="100%">
-      <Table {...getTableProps()}>
-        <Thead>
-          {headerGroups.map((headerGroup) => (
-            <Tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <Th
-                  {...column.getHeaderProps(column.getSortByToggleProps())}
-                  _hover={{
-                    backgroundColor: "gray.50",
-                    transition: "200ms ease-in-out",
-                  }}
-                >
-                  {column.render("Header")}
-                  <chakra.span pl="1.5">
-                    {column.isSorted &&
-                      (column.isSortedDesc ? (
-                        <TriangleDownIcon
-                          aria-label="sorted descending"
-                          height={2.5}
-                          width={2.5}
-                          mb={0.5}
-                        />
-                      ) : (
-                        <TriangleUpIcon
-                          aria-label="sorted ascending"
-                          height={2.5}
-                          width={2.5}
-                          mb={0.5}
-                        />
-                      ))}
-                  </chakra.span>
-                </Th>
-              ))}
-            </Tr>
-          ))}
-        </Thead>
-        {isLoading ? (
-          <Tbody>
-            {[...Array(perPage)].map((_, i) => (
-              <Tr padding={0} key={i}>
-                {[...Array(6)].map((_, i) => (
-                  <Td key={i}>
-                    <Skeleton height="26px" width="100%" />
-                  </Td>
-                ))}
-              </Tr>
-            ))}
-          </Tbody>
-        ) : (
-          <Tbody {...getTableBodyProps()}>
-            {page.map((row, i) => {
-              prepareRow(row);
-              return (
-                <Tr
-                  {...row.getRowProps()}
-                  _hover={{
-                    backgroundColor: "gray.50",
-                    transition: "200ms ease-in-out",
-                  }}
-                >
-                  {row.cells.map((cell) => {
-                    return (
-                      <Td fontWeight="medium" {...cell.getCellProps()}>
-                        <Fade in>{cell.render("Cell")}</Fade>
-                      </Td>
-                    );
-                  })}
-                </Tr>
-              );
-            })}
-          </Tbody>
-        )}
-      </Table>
+    <Flex direction="column" width="100%" margin={10}>
+      <Heading
+        as="h1"
+        fontSize={{ base: "xx-large", md: "xxx-large" }}
+        fontWeight="extrabold"
+        marginBottom={2}
+        marginX={{ base: 2, md: 0 }}
+      >
+        {"Crypto by Market Cap"}
+      </Heading>
 
-      <Flex justifyContent="space-between" m={4} alignItems="center">
-        <Flex alignItems="center">
-          <Select
-            w={32}
-            value={perPage}
-            marginRight={4}
-            onChange={(e) => {
-              onChangePerPage(Number(e.target.value));
-            }}
-          >
-            {[10, 25, 50, 100].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                Show {pageSize}
-              </option>
-            ))}
-          </Select>
-          <Text>
-            {"Page "}
-            <Text fontWeight="bold" as="span">
-              {pageIndex + 1}
-            </Text>
-            {" of "}
-            <Text fontWeight="bold" as="span">
-              {pageOptions.length}
-            </Text>
-          </Text>
-        </Flex>
+      <Flex alignItems="center">
+        <Text
+          fontWeight="bold"
+          fontSize="large"
+          color="gray.500"
+          marginX={{ base: 2, md: 0 }}
+        >
+          {"In the past 24 hours"}
+        </Text>
+        <Fade in={isLoading} unmountOnExit>
+          <Spinner marginLeft={2} marginTop={1} size="xs" color="blue.500" />
+        </Fade>
+      </Flex>
 
-        <Flex>
-          <Tooltip label="Previous Page">
-            <IconButton
-              aria-label="Go to previous page"
-              onClick={() => {
-                onChangeCurrentPage(currentPage === 0 ? 0 : currentPage - 1);
-              }}
-              isDisabled={!canPreviousPage}
-              icon={<ChevronLeftIcon h={6} w={6} />}
-            />
-          </Tooltip>
-          <Tooltip label="Next Page">
-            <IconButton
-              aria-label="Go to next page"
-              onClick={() => {
-                onChangeCurrentPage(currentPage + 1);
-              }}
-              isDisabled={!canNextPage}
-              ml={4}
-              icon={<ChevronRightIcon h={6} w={6} />}
-            />
-          </Tooltip>
-        </Flex>
+      <Flex direction="column" height="100%" width="100%" margin={6}>
+        <Table
+          data={data}
+          columns={columns}
+          currentPage={currentPage}
+          isLoading={isLoading}
+          perPage={perPage}
+          maxPageCount={maxPageCount}
+          onChangeCurrentPage={onChangeCurrentPage}
+          onChangePerPage={onChangePerPage}
+        />
       </Flex>
     </Flex>
   );

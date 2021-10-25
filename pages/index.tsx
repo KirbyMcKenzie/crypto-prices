@@ -15,29 +15,7 @@ const Home: NextPage = () => {
       </Head>
 
       <MainView>
-        <Flex direction="column" width="100%" margin={10}>
-          <Heading
-            as="h1"
-            fontSize={{ base: "xx-large", md: "xxx-large" }}
-            fontWeight="extrabold"
-            marginBottom={2}
-            marginX={{ base: 2, md: 0 }}
-          >
-            {"Crypto by Market Cap"}
-          </Heading>
-          <Text
-            fontWeight="bold"
-            fontSize="large"
-            color="gray.500"
-            marginX={{ base: 2, md: 0 }}
-          >
-            {"In the past 24 hours"}
-          </Text>
-
-          <Box marginY={6}>
-            <CryptoTableContainer />
-          </Box>
-        </Flex>
+        <CryptoTableContainer />
       </MainView>
     </div>
   );
