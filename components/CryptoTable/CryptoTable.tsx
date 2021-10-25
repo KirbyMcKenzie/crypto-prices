@@ -1,19 +1,9 @@
 // TODO: km - fix key warnings
 /* eslint-disable react/jsx-key */
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
+import { useTable, usePagination, useSortBy } from "react-table";
 import {
-  useTable,
-  usePagination,
-  useSortBy,
-  Cell,
-  Row,
-  ColumnInstance,
-  TableRowProps,
-  TableCellProps,
-  TableProps,
-  Column,
-} from "react-table";
-import {
+  Fade,
   Flex,
   Table,
   Tbody,
@@ -26,6 +16,7 @@ import {
   IconButton,
   Select,
   chakra,
+  Skeleton,
 } from "@chakra-ui/react";
 
 import {
@@ -42,54 +33,69 @@ import LargeNumberCell from "./Cells/LargeNumberCell";
 import CurrentPriceCell from "./Cells/CurrentPriceCell";
 import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
 
-const columns = [
-  {
-    Header: "Name",
-    accessor: "name",
-    Cell: NameCell,
-  },
-  {
-    Header: "Price",
-    accessor: "currentPrice",
-    Cell: CurrentPriceCell,
-  },
-  {
-    Header: "Change",
-    accessor: "priceChangePercentage24h",
-    Cell: PriceChangePercentCell,
-  },
-  {
-    Header: "Volume (24hr)",
-    accessor: "totalVolume",
-    Cell: (props: any) => (
-      <LargeNumberCell value={props.cell.value} isCurrency />
-    ),
-  },
-  {
-    Header: "Market Cap",
-    accessor: "marketCap",
-    Cell: (props: any) => (
-      <LargeNumberCell value={props.cell.value} isCurrency />
-    ),
-  },
-  {
-    Header: "Supply",
-    accessor: "circulatingSupply",
-    Cell: LargeNumberCell,
-  },
-];
-
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
   isLoading?: boolean;
   error?: string;
+  currentPage?: number;
+  perPage?: number;
+  maxPageCount?: number;
+  onChangeCurrentPage: (page: number) => void;
+  onChangePerPage: (page: number) => void;
 }
 
 const CryptoTable: FC<Props> = ({
   cryptocurrencies = [],
   isLoading = false,
   error,
+  currentPage = 1,
+  perPage = 10,
+  maxPageCount = 10,
+  onChangeCurrentPage,
+  onChangePerPage,
 }) => {
+  const columns = useMemo(
+    () => [
+      {
+        Header: "Name",
+        accessor: "name",
+        Cell: NameCell,
+      },
+      {
+        Header: "Price",
+        accessor: "currentPrice",
+        Cell: CurrentPriceCell,
+      },
+      {
+        Header: "Change",
+        accessor: "priceChangePercentage24h",
+        Cell: PriceChangePercentCell,
+      },
+      {
+        Header: "Volume (24hr)",
+        accessor: "totalVolume",
+        Cell: (props: any) => (
+          <LargeNumberCell value={props.cell.value} isCurrency />
+        ),
+      },
+      {
+        Header: "Market Cap",
+        accessor: "marketCap",
+        Cell: (props: any) => (
+          <LargeNumberCell value={props.cell.value} isCurrency />
+        ),
+      },
+      {
+        Header: "Supply",
+        accessor: "circulatingSupply",
+        Cell: LargeNumberCell,
+      },
+    ],
+    []
+  );
+
+  const data = React.useMemo(() => cryptocurrencies, [cryptocurrencies]);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -99,17 +105,26 @@ const CryptoTable: FC<Props> = ({
     canPreviousPage,
     canNextPage,
     pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
+    state: { pageIndex },
   } = useTable(
     {
       columns,
-      data: cryptocurrencies,
-      initialState: { pageIndex: 0 },
+      data,
+      useControlledState: (state) => {
+        return React.useMemo(
+          () => ({
+            ...state,
+            pageIndex: currentPage,
+          }),
+          [state, currentPage]
+        );
+      },
+      initialState: { pageIndex: currentPage },
+      manualPagination: true,
+      pageCount: maxPageCount,
+      autoResetSortBy: false,
+      autoResetPage: false,
     },
     useSortBy,
     usePagination
@@ -153,63 +168,79 @@ const CryptoTable: FC<Props> = ({
             </Tr>
           ))}
         </Thead>
-        <Tbody {...getTableBodyProps()}>
-          {page.map((row, i) => {
-            prepareRow(row);
-            return (
-              <Tr
-                {...row.getRowProps()}
-                _hover={{
-                  backgroundColor: "gray.50",
-                  transition: "200ms ease-in-out",
-                }}
-              >
-                {row.cells.map((cell) => {
-                  return (
-                    <Td fontWeight="medium" {...cell.getCellProps()}>
-                      {cell.render("Cell")}
-                    </Td>
-                  );
-                })}
+        {isLoading ? (
+          <Tbody>
+            {[...Array(perPage)].map((_, i) => (
+              <Tr padding={0} key={i}>
+                {[...Array(6)].map((_, i) => (
+                  <Td key={i}>
+                    <Skeleton height="26px" width="100%" />
+                  </Td>
+                ))}
               </Tr>
-            );
-          })}
-        </Tbody>
+            ))}
+          </Tbody>
+        ) : (
+          <Tbody {...getTableBodyProps()}>
+            {page.map((row, i) => {
+              prepareRow(row);
+              return (
+                <Tr
+                  {...row.getRowProps()}
+                  _hover={{
+                    backgroundColor: "gray.50",
+                    transition: "200ms ease-in-out",
+                  }}
+                >
+                  {row.cells.map((cell) => {
+                    return (
+                      <Td fontWeight="medium" {...cell.getCellProps()}>
+                        <Fade in>{cell.render("Cell")}</Fade>
+                      </Td>
+                    );
+                  })}
+                </Tr>
+              );
+            })}
+          </Tbody>
+        )}
       </Table>
 
       <Flex justifyContent="space-between" m={4} alignItems="center">
         <Flex alignItems="center">
-          <Text mr={8}>
-            Page{" "}
-            <Text fontWeight="bold" as="span">
-              {pageIndex + 1}
-            </Text>{" "}
-            of{" "}
-            <Text fontWeight="bold" as="span">
-              {pageOptions.length}
-            </Text>
-          </Text>
-          <Text>Go to page:</Text>{" "}
           <Select
             w={32}
-            value={pageSize}
+            value={perPage}
+            marginRight={4}
             onChange={(e) => {
-              setPageSize(Number(e.target.value));
+              onChangePerPage(Number(e.target.value));
             }}
           >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
+            {[10, 25, 50, 100].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
                 Show {pageSize}
               </option>
             ))}
           </Select>
+          <Text>
+            {"Page "}
+            <Text fontWeight="bold" as="span">
+              {pageIndex + 1}
+            </Text>
+            {" of "}
+            <Text fontWeight="bold" as="span">
+              {pageOptions.length}
+            </Text>
+          </Text>
         </Flex>
 
         <Flex>
           <Tooltip label="Previous Page">
             <IconButton
               aria-label="Go to previous page"
-              onClick={previousPage}
+              onClick={() => {
+                onChangeCurrentPage(currentPage === 0 ? 0 : currentPage - 1);
+              }}
               isDisabled={!canPreviousPage}
               icon={<ChevronLeftIcon h={6} w={6} />}
             />
@@ -217,7 +248,9 @@ const CryptoTable: FC<Props> = ({
           <Tooltip label="Next Page">
             <IconButton
               aria-label="Go to next page"
-              onClick={nextPage}
+              onClick={() => {
+                onChangeCurrentPage(currentPage + 1);
+              }}
               isDisabled={!canNextPage}
               ml={4}
               icon={<ChevronRightIcon h={6} w={6} />}
