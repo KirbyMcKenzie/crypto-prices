@@ -12,11 +12,11 @@ import Table from "../Table";
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
   isLoading?: boolean;
-  hasData?: boolean;
   error?: string;
   currentPage?: number;
   perPage?: number;
   maxPageCount?: number;
+  onRefreshData: () => void;
   onChangeCurrentPage: (page: number) => void;
   onChangePerPage: (page: number) => void;
 }
@@ -24,11 +24,11 @@ export interface Props {
 const CryptoTable: FC<Props> = ({
   cryptocurrencies = [],
   isLoading = true,
-  hasData = false,
   error,
   currentPage = 1,
   perPage = 10,
   maxPageCount = 10,
+  onRefreshData,
   onChangeCurrentPage,
   onChangePerPage,
 }) => {
@@ -104,12 +104,14 @@ const CryptoTable: FC<Props> = ({
         <Table
           data={data}
           columns={columns}
+          error={error}
           currentPage={currentPage}
           isLoading={isLoading}
           perPage={perPage}
           maxPageCount={maxPageCount}
           onChangeCurrentPage={onChangeCurrentPage}
           onChangePerPage={onChangePerPage}
+          onRefreshData={onRefreshData}
         />
       </Flex>
     </Flex>

@@ -6,6 +6,7 @@ import {
   Skeleton,
   SkeletonProps,
   SkeletonCircle,
+  Text,
   Tbody,
   Td,
   Tr,
@@ -13,6 +14,7 @@ import {
 import { Row, TableBodyPropGetter, TableBodyProps } from "react-table";
 
 export interface Props {
+  error?: string;
   page: Row<object>[];
   perPage?: number;
   isLoading?: boolean;
@@ -29,6 +31,7 @@ const SkeletonTd = ({ ...props }: SkeletonProps) => (
 );
 
 const TableBody: FC<Props> = ({
+  error,
   page = [],
   perPage = 10,
   isLoading = true,

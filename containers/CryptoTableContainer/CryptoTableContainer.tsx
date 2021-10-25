@@ -8,7 +8,7 @@ const CryptoTableContainer: FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [perPage, setPerPage] = useState<number>(10);
 
-  const { data, isValidating } = useRequest<Cryptocurrency[]>(
+  const { data, error, isValidating, mutate } = useRequest<Cryptocurrency[]>(
     {
       url: "/v3/coins/markets",
       params: {
@@ -34,6 +34,8 @@ const CryptoTableContainer: FC = () => {
       onChangeCurrentPage={(newPage) => setCurrentPage(newPage)}
       onChangePerPage={(newPage) => setPerPage(newPage)}
       maxPageCount={20}
+      error={error?.message}
+      onRefreshData={() => mutate([] as any)}
     />
   );
 };

@@ -1,35 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
-import {
-  Box,
-  chakra,
-  Fade,
-  Flex,
-  IconButton,
-  Select,
-  Skeleton,
-  SkeletonCircle,
-  Table as ChakraTable,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tooltip,
-  Tr,
-} from "@chakra-ui/react";
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  TriangleDownIcon,
-  TriangleUpIcon,
-} from "@chakra-ui/icons";
+import React, { FC } from "react";
+import { Table as ChakraTable } from "@chakra-ui/react";
+
 import { useTable, useSortBy, usePagination } from "react-table";
 
-import { Cryptocurrency } from "../../types/cryptocurrency";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination";
-import CurrentPriceCell from "../CryptoTable/Cells/CurrentPriceCell";
+import ErrorPlaceholder from "../ErrorPlaceholder";
 
 export interface Props {
   isLoading?: boolean;
@@ -39,6 +16,7 @@ export interface Props {
   maxPageCount?: number;
   onChangeCurrentPage: (page: number) => void;
   onChangePerPage: (page: number) => void;
+  onRefreshData: () => void;
   columns: any; // TODO: km - type
   data: any;
 }
@@ -51,6 +29,7 @@ const Table: FC<Props> = ({
   maxPageCount = 10,
   onChangeCurrentPage,
   onChangePerPage,
+  onRefreshData,
   columns = [],
   data = [],
 }) => {
@@ -87,11 +66,22 @@ const Table: FC<Props> = ({
     usePagination
   );
 
+  if (error) {
+    return (
+      <ErrorPlaceholder
+        title="There was an issue retrieving data"
+        subtitle="Please retry or try again later"
+        onRetry={onRefreshData}
+      />
+    );
+  }
+
   return (
     <>
       <ChakraTable {...getTableProps()}>
         <TableHead headerGroups={headerGroups} />
         <TableBody
+          error={error}
           page={page}
           perPage={perPage}
           isLoading={isLoading && !data.length}
