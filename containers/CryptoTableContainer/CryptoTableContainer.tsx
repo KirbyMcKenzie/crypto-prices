@@ -1,5 +1,4 @@
-import { AxiosResponse } from "axios";
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 
 import CryptoTable from "../../components/CryptoTable";
 import useRequest from "../../hooks/useRequest";
@@ -12,7 +11,7 @@ const CryptoTableContainer: FC = () => {
 
   const { data, error, isValidating, mutate } = useRequest<Cryptocurrency[]>(
     {
-      // Bit of a hack to mock out error states
+      // Bit of a hack to mock out an error state
       url: isApiEnabled ? "/v3/coins/markets" : "/v3/shitcoins/markets",
       params: {
         vs_currency: "AUD",

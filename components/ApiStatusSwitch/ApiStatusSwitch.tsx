@@ -6,7 +6,7 @@ const tooltipExplainerText =
   "'Disables' the API by purposely updating the endpoints to return an error.";
 
 export interface Props {
-  isApiEnabled?: boolean;
+  isApiEnabled: boolean;
   onChangeApiStatus: (status: boolean) => void;
 }
 
@@ -32,7 +32,7 @@ const ApiStatusSwitch: FC<Props> = ({
         {`API ${isApiEnabled ? "ENABLED" : "DISABLED"}`}
       </Text>
       <Tooltip label={tooltipExplainerText}>
-        <InfoOutlineIcon color="gray.700" height={3.5} />
+        <InfoOutlineIcon color="gray.600" height={3} />
       </Tooltip>
     </Flex>
   );

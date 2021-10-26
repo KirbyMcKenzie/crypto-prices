@@ -17,6 +17,7 @@ import CurrentPriceCell from "./Cells/CurrentPriceCell";
 import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
 import Table from "../Table";
 import ApiStatusSwitch from "../ApiStatusSwitch";
+import CryptoTableHeader from "./CryptoTableHeader";
 
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
@@ -89,31 +90,8 @@ const CryptoTable: FC<Props> = ({
 
   return (
     <Flex direction="column" width="100%" margin={10}>
-      <Heading
-        as="h1"
-        fontSize={{ base: "xx-large", md: "xxx-large" }}
-        fontWeight="extrabold"
-        marginBottom={2}
-        marginX={{ base: 2, md: 0 }}
-      >
-        {"Crypto by Market Cap"}
-      </Heading>
-
-      <Flex alignItems="center">
-        <Text
-          fontWeight="bold"
-          fontSize="large"
-          color="gray.500"
-          marginX={{ base: 2, md: 0 }}
-        >
-          {"In the past 24 hours"}
-        </Text>
-        <Fade in={isLoading} unmountOnExit>
-          <Spinner marginLeft={2} marginTop={1} size="xs" color="blue.500" />
-        </Fade>
-      </Flex>
-
-      <ApiStatusSwitch
+      <CryptoTableHeader
+        isLoading={isLoading}
         onChangeApiStatus={onChangeApiStatus}
         isApiEnabled={isApiEnabled}
       />
