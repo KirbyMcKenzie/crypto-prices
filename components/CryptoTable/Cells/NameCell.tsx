@@ -1,8 +1,7 @@
 import { FC } from "react";
-import Image from "next/image";
 import { Row } from "react-table";
 
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex, Text, Image } from "@chakra-ui/react";
 import { Cryptocurrency } from "../../../types/cryptocurrency";
 
 interface Props {
@@ -16,8 +15,8 @@ const NameCell: FC<Props> = ({ row }) => {
       <Image
         src={crypto.image}
         alt={`${crypto.name} logo`}
-        height={32}
-        width={32}
+        height="26px"
+        width="26px"
       />
       <Text marginLeft={2} fontWeight="bold" isTruncated>
         {crypto.name}
