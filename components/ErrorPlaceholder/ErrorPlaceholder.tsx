@@ -4,7 +4,7 @@ import { WarningIcon } from "@chakra-ui/icons";
 
 export interface Props {
   icon?: FC<IconProps>;
-  title: string;
+  title?: string;
   subtitle?: string;
   onRetry?: () => void;
 }

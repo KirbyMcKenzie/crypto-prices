@@ -12,7 +12,8 @@ const CryptoTableContainer: FC = () => {
 
   const { data, error, isValidating, mutate } = useRequest<Cryptocurrency[]>(
     {
-      // Bit of a hack to easily force the api to return an error
+      // Bit of a hack to force the api to return an error
+      // by using an invalid endpoint
       url: isApiEnabled ? "/v3/coins/markets" : "/v3/shitcoins/markets",
       params: {
         vs_currency: "AUD",

@@ -17,7 +17,7 @@ const CryptoTableHeader: FC<Props> = ({
     <>
       <Heading
         as="h1"
-        fontSize={{ base: "xx-large", md: "xxx-large" }}
+        fontSize={{ base: "x-large", md: "xxx-large" }}
         fontWeight="extrabold"
         marginBottom={2}
         marginX={{ base: 2, md: 0 }}
@@ -27,15 +27,20 @@ const CryptoTableHeader: FC<Props> = ({
 
       <Flex alignItems="center">
         <Text
-          fontWeight="bold"
-          fontSize="large"
           color="gray.500"
+          fontSize={{ base: "medium", md: "large" }}
+          fontWeight="bold"
           marginX={{ base: 2, md: 0 }}
         >
           {"In the past 24 hours"}
         </Text>
         <Fade in={isLoading} unmountOnExit>
-          <Spinner marginLeft={2} marginTop={1} size="xs" color="blue.500" />
+          <Spinner
+            size="xs"
+            color="blue.500"
+            marginLeft={{ base: 1, md: 2 }}
+            marginTop={1}
+          />
         </Fade>
       </Flex>
 

@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 
 import { Cryptocurrency } from "../../types/cryptocurrency";
 
@@ -43,8 +43,8 @@ const CryptoTable: FC<Props> = ({
   const columns: Column[] = useMemo(
     () => [
       {
-        Header: "Name",
         accessor: "name",
+        Header: () => <Box textAlign="left">{"NAME"}</Box>,
         Cell: NameCell,
       },
       {

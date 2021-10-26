@@ -15,6 +15,7 @@ const TableHead: FC<Props> = ({ headerGroups = [] }) => {
           {headerGroup.headers.map((column: any) => (
             <Th
               {...column.getHeaderProps(column.getSortByToggleProps())}
+              isNumeric
               _hover={{
                 backgroundColor: "gray.50",
                 transition: "200ms ease-in-out",

@@ -26,7 +26,7 @@ const ApiStatusSwitch: FC<Props> = ({
       <Text
         color={isApiEnabled ? "green.500" : "gray.600"}
         fontWeight="bold"
-        fontSize="sm"
+        fontSize={{ base: "xs", md: "sm" }}
         marginLeft={2}
         marginRight={1}
       >

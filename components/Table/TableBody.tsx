@@ -84,7 +84,7 @@ const TableBody: FC<Props> = ({
           >
             {row.cells.map((cell) => {
               return (
-                <Td fontWeight="medium" {...cell.getCellProps()}>
+                <Td isNumeric fontWeight="medium" {...cell.getCellProps()}>
                   <Fade in>{cell.render("Cell")}</Fade>
                 </Td>
               );

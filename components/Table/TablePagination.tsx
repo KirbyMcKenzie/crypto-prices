@@ -43,8 +43,9 @@ const TablePagination: FC<Props> = ({
       <Flex alignItems="center">
         <Select
           value={perPage}
-          width={32}
+          fontWeight="medium"
           marginRight={4}
+          width={32}
           onChange={handleChangePerPage}
         >
           {pageSizeOptions.map((pageSize) => (
