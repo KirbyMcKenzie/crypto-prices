@@ -44,7 +44,7 @@ const CryptoTable: FC<Props> = ({
     () => [
       {
         accessor: "name",
-        Header: () => <Box textAlign="left">{"NAME"}</Box>,
+        Header: "Name",
         Cell: NameCell,
       },
       {

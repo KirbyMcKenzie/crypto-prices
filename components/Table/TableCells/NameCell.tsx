@@ -15,10 +15,10 @@ const NameCell: FC<Props> = ({ row }) => {
       <Image
         src={crypto.image}
         alt={`${crypto.name} logo`}
-        height="26px"
-        width="26px"
+        height={6}
+        width={6}
       />
-      <Text marginLeft={2} fontWeight="bold" isTruncated>
+      <Text marginLeft={3} fontWeight="bold" isTruncated>
         {crypto.name}
       </Text>
       <Text

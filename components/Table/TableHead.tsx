@@ -12,10 +12,11 @@ const TableHead: FC<Props> = ({ headerGroups = [] }) => {
     <Thead>
       {headerGroups.map((headerGroup) => (
         <Tr {...headerGroup.getHeaderGroupProps()}>
-          {headerGroup.headers.map((column: any) => (
+          {headerGroup.headers.map((column: any, index: number) => (
             <Th
               {...column.getHeaderProps(column.getSortByToggleProps())}
-              isNumeric
+              flex={1}
+              isNumeric={index !== 0}
               _hover={{
                 backgroundColor: "gray.50",
                 transition: "200ms ease-in-out",
