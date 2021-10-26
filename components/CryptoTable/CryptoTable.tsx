@@ -17,7 +17,7 @@ export interface Props {
   cryptocurrencies?: Cryptocurrency[];
   isLoading?: boolean;
   isApiEnabled?: boolean;
-  error?: string;
+  hasError?: boolean;
   currentPage?: number;
   perPage?: number;
   maxPageCount?: number;
@@ -29,9 +29,9 @@ export interface Props {
 
 const CryptoTable: FC<Props> = ({
   cryptocurrencies = [],
-  isLoading = true,
+  isLoading = false,
   isApiEnabled = true,
-  error,
+  hasError = false,
   currentPage = 1,
   perPage = 10,
   maxPageCount = 10,
@@ -94,7 +94,7 @@ const CryptoTable: FC<Props> = ({
         <Table
           data={data}
           columns={columns}
-          error={error}
+          hasError={hasError}
           currentPage={currentPage}
           isLoading={isLoading}
           perPage={perPage}

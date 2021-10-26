@@ -19,6 +19,7 @@ const ErrorPlaceholder: FC<Props> = ({
   return (
     <Fade in unmountOnExit>
       <Flex
+        data-testid="error-placeholder"
         direction="column"
         alignItems="center"
         justifyContent="center"

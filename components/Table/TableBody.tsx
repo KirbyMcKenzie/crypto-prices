@@ -39,7 +39,7 @@ const TableBody: FC<Props> = ({
 }) => {
   if (isLoading) {
     return (
-      <Tbody>
+      <Tbody data-testid="tbody-skeleton">
         {[...Array(perPage)].map((_, i) => (
           <Tr padding={0} key={i}>
             <Td>
@@ -76,6 +76,7 @@ const TableBody: FC<Props> = ({
         return (
           <Tr
             {...row.getRowProps()}
+            data-testid="tbody-row"
             _hover={{
               backgroundColor: "gray.50",
               transition: "200ms ease-in-out",

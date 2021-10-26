@@ -12,7 +12,7 @@ export interface Props {
   columns: Column[];
   currentPage?: number;
   data: any[];
-  error?: string;
+  hasError?: boolean;
   isLoading?: boolean;
   maxPageCount?: number;
   perPage?: number;
@@ -24,8 +24,8 @@ export interface Props {
 const Table: FC<Props> = ({
   columns = [],
   currentPage = 1,
-  error,
   data = [],
+  hasError = false,
   isLoading = false,
   maxPageCount = 10,
   perPage = 10,
@@ -65,7 +65,7 @@ const Table: FC<Props> = ({
     usePagination
   );
 
-  if (error) {
+  if (hasError) {
     return (
       <ErrorPlaceholder
         title="There was an issue retrieving data"
