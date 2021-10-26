@@ -1,5 +1,13 @@
 import React, { FC, useMemo } from "react";
-import { Fade, Flex, Heading, Text, Spinner } from "@chakra-ui/react";
+import {
+  Fade,
+  Flex,
+  Heading,
+  Text,
+  Spinner,
+  Box,
+  Switch,
+} from "@chakra-ui/react";
 
 import { Cryptocurrency } from "../../types/cryptocurrency";
 
@@ -8,15 +16,18 @@ import LargeNumberCell from "./Cells/LargeNumberCell";
 import CurrentPriceCell from "./Cells/CurrentPriceCell";
 import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
 import Table from "../Table";
+import ApiStatusSwitch from "../ApiStatusSwitch";
 
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
   isLoading?: boolean;
+  isApiEnabled?: boolean;
   error?: string;
   currentPage?: number;
   perPage?: number;
   maxPageCount?: number;
   onRefreshData: () => void;
+  onChangeApiStatus: () => void;
   onChangeCurrentPage: (page: number) => void;
   onChangePerPage: (page: number) => void;
 }
@@ -24,11 +35,13 @@ export interface Props {
 const CryptoTable: FC<Props> = ({
   cryptocurrencies = [],
   isLoading = true,
+  isApiEnabled = true,
   error,
   currentPage = 1,
   perPage = 10,
   maxPageCount = 10,
   onRefreshData,
+  onChangeApiStatus,
   onChangeCurrentPage,
   onChangePerPage,
 }) => {
@@ -99,6 +112,11 @@ const CryptoTable: FC<Props> = ({
           <Spinner marginLeft={2} marginTop={1} size="xs" color="blue.500" />
         </Fade>
       </Flex>
+
+      <ApiStatusSwitch
+        onChangeApiStatus={onChangeApiStatus}
+        isApiEnabled={isApiEnabled}
+      />
 
       <Flex direction="column" height="100%" width="100%" margin={6}>
         <Table

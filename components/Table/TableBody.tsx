@@ -46,10 +46,10 @@ const TableBody: FC<Props> = ({
             <Td>
               <Flex
                 alignItems="center"
-                minWidth={{ base: "150px", md: "182px" }}
+                minWidth={{ base: "150px", md: "176px" }}
               >
                 <Box>
-                  <SkeletonCircle height="32px" width="32px" />
+                  <SkeletonCircle height="26px" width="26px" />
                 </Box>
                 <Skeleton
                   height="24px"
