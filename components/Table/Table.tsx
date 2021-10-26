@@ -1,37 +1,37 @@
-import React, { FC } from "react";
-import { Table as ChakraTable } from "@chakra-ui/react";
+import React, { FC, useMemo } from "react";
 
-import { useTable, useSortBy, usePagination } from "react-table";
+import { Flex, Table as ChakraTable } from "@chakra-ui/react";
+import { useTable, useSortBy, usePagination, Column } from "react-table";
 
+import ErrorPlaceholder from "../ErrorPlaceholder";
 import TableHead from "./TableHead";
 import TableBody from "./TableBody";
 import TablePagination from "./TablePagination";
-import ErrorPlaceholder from "../ErrorPlaceholder";
 
 export interface Props {
-  isLoading?: boolean;
-  error?: string;
+  columns: Column[];
   currentPage?: number;
-  perPage?: number;
+  data: any[];
+  error?: string;
+  isLoading?: boolean;
   maxPageCount?: number;
+  perPage?: number;
   onChangeCurrentPage: (page: number) => void;
   onChangePerPage: (page: number) => void;
   onRefreshData: () => void;
-  columns: any; // TODO: km - type
-  data: any;
 }
 
 const Table: FC<Props> = ({
-  isLoading = false,
-  error,
+  columns = [],
   currentPage = 1,
-  perPage = 10,
+  error,
+  data = [],
+  isLoading = false,
   maxPageCount = 10,
+  perPage = 10,
   onChangeCurrentPage,
   onChangePerPage,
   onRefreshData,
-  columns = [],
-  data = [],
 }) => {
   const {
     getTableProps,
@@ -41,14 +41,13 @@ const Table: FC<Props> = ({
     page,
     canPreviousPage,
     canNextPage,
-    pageOptions,
     state: { pageIndex },
   } = useTable(
     {
       columns,
       data,
       useControlledState: (state) => {
-        return React.useMemo(
+        return useMemo(
           () => ({
             ...state,
             pageIndex: currentPage,
@@ -78,23 +77,24 @@ const Table: FC<Props> = ({
 
   return (
     <>
-      <ChakraTable {...getTableProps()}>
-        <TableHead headerGroups={headerGroups} />
-        <TableBody
-          error={error}
-          page={page}
-          perPage={perPage}
-          isLoading={isLoading && !data.length}
-          getTableBodyProps={getTableBodyProps}
-          prepareRow={prepareRow}
-        />
-      </ChakraTable>
+      <Flex direction="column" width="100%" overflowX="auto">
+        <ChakraTable {...getTableProps()}>
+          <TableHead headerGroups={headerGroups} />
+          <TableBody
+            getTableBodyProps={getTableBodyProps}
+            isLoading={isLoading && !data.length}
+            page={page}
+            perPage={perPage}
+            prepareRow={prepareRow}
+          />
+        </ChakraTable>
+      </Flex>
+
       <TablePagination
+        currentPage={currentPage}
         canPreviousPage={canPreviousPage}
         canNextPage={canNextPage}
-        currentPage={currentPage}
         pageIndex={pageIndex}
-        pageOptions={pageOptions}
         perPage={perPage}
         onChangeCurrentPage={onChangeCurrentPage}
         onChangePerPage={onChangePerPage}

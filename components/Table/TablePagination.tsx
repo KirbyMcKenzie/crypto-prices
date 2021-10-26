@@ -1,13 +1,15 @@
-import React, { FC } from "react";
+import React, { ChangeEvent, FC } from "react";
 import { Flex, IconButton, Select, Text, Tooltip } from "@chakra-ui/react";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
+
+const pageSizeOptions = [10, 25, 50, 100];
 
 export interface Props {
   canPreviousPage?: boolean;
   canNextPage?: boolean;
   currentPage?: number;
+  isLoading?: boolean;
   pageIndex?: number;
-  pageOptions?: number[];
   perPage?: number;
   onChangeCurrentPage: (page: number) => void;
   onChangePerPage: (page: number) => void;
@@ -17,26 +19,32 @@ const TablePagination: FC<Props> = ({
   canPreviousPage = true,
   canNextPage = true,
   currentPage = 0,
+  isLoading = false,
   pageIndex = 0,
-  pageOptions = [],
   perPage = 10,
   onChangeCurrentPage,
   onChangePerPage,
 }) => {
+  const handleChangePerPage = (event: ChangeEvent<HTMLSelectElement>) =>
+    onChangePerPage(Number(event.target.value));
+
+  const handleNextPage = () => onChangeCurrentPage(currentPage + 1);
+
+  const handlePreviousPage = () =>
+    onChangeCurrentPage(currentPage === 0 ? 0 : currentPage - 1);
+
   return (
-    <Flex justifyContent="space-between" m={4} alignItems="center">
+    <Flex justifyContent="space-between" alignItems="center" margin={4}>
       <Flex alignItems="center">
         <Select
-          w={32}
           value={perPage}
+          width={32}
           marginRight={4}
-          onChange={(e) => {
-            onChangePerPage(Number(e.target.value));
-          }}
+          onChange={handleChangePerPage}
         >
-          {[10, 25, 50, 100].map((pageSize) => (
+          {pageSizeOptions.map((pageSize) => (
             <option key={pageSize} value={pageSize}>
-              Show {pageSize}
+              {`Show ${pageSize}`}
             </option>
           ))}
         </Select>
@@ -46,11 +54,9 @@ const TablePagination: FC<Props> = ({
         <Tooltip label="Previous Page">
           <IconButton
             aria-label="Go to previous page"
-            onClick={() => {
-              onChangeCurrentPage(currentPage === 0 ? 0 : currentPage - 1);
-            }}
-            isDisabled={!canPreviousPage}
             icon={<ChevronLeftIcon h={6} w={6} />}
+            isDisabled={!canPreviousPage || isLoading}
+            onClick={handlePreviousPage}
           />
         </Tooltip>
 
@@ -61,12 +67,9 @@ const TablePagination: FC<Props> = ({
         <Tooltip label="Next Page">
           <IconButton
             aria-label="Go to next page"
-            onClick={() => {
-              onChangeCurrentPage(currentPage + 1);
-            }}
-            isDisabled={!canNextPage}
-            // ml={4}
             icon={<ChevronRightIcon h={6} w={6} />}
+            isDisabled={!canNextPage || isLoading}
+            onClick={handleNextPage}
           />
         </Tooltip>
       </Flex>

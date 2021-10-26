@@ -1,23 +1,17 @@
 import React, { FC, useMemo } from "react";
-import {
-  Fade,
-  Flex,
-  Heading,
-  Text,
-  Spinner,
-  Box,
-  Switch,
-} from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
 import { Cryptocurrency } from "../../types/cryptocurrency";
 
-import NameCell from "./Cells/NameCell";
-import LargeNumberCell from "./Cells/LargeNumberCell";
-import CurrentPriceCell from "./Cells/CurrentPriceCell";
-import PriceChangePercentCell from "./Cells/PriceChangePercentCell";
+import {
+  NameCell,
+  CurrentPriceCell,
+  PriceChangePercentCell,
+  LargeNumberCell,
+} from "../Table/TableCells";
 import Table from "../Table";
-import ApiStatusSwitch from "../ApiStatusSwitch";
 import CryptoTableHeader from "./CryptoTableHeader";
+import { Column } from "react-table";
 
 export interface Props {
   cryptocurrencies?: Cryptocurrency[];
@@ -46,7 +40,7 @@ const CryptoTable: FC<Props> = ({
   onChangeCurrentPage,
   onChangePerPage,
 }) => {
-  const columns = useMemo(
+  const columns: Column[] = useMemo(
     () => [
       {
         Header: "Name",
@@ -66,14 +60,14 @@ const CryptoTable: FC<Props> = ({
       {
         Header: "Volume (24hr)",
         accessor: "totalVolume",
-        Cell: (props: any) => (
+        Cell: (props) => (
           <LargeNumberCell value={props.cell.value} isCurrency />
         ),
       },
       {
         Header: "Market Cap",
         accessor: "marketCap",
-        Cell: (props: any) => (
+        Cell: (props) => (
           <LargeNumberCell value={props.cell.value} isCurrency />
         ),
       },
@@ -89,14 +83,14 @@ const CryptoTable: FC<Props> = ({
   const data = React.useMemo(() => cryptocurrencies, [cryptocurrencies]);
 
   return (
-    <Flex direction="column" width="100%" margin={10}>
+    <Flex direction="column" width="100%">
       <CryptoTableHeader
         isLoading={isLoading}
         onChangeApiStatus={onChangeApiStatus}
         isApiEnabled={isApiEnabled}
       />
 
-      <Flex direction="column" height="100%" width="100%" margin={6}>
+      <Flex direction="column" marginY={6}>
         <Table
           data={data}
           columns={columns}

@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { chakra, Th, Thead, Tr } from "@chakra-ui/react";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
+import { HeaderGroup } from "react-table";
 
 export interface Props {
-  headerGroups: any[]; // TODO: km - type
+  headerGroups: HeaderGroup<Record<any, any>>[];
 }
 
 const TableHead: FC<Props> = ({ headerGroups = [] }) => {
@@ -20,7 +21,7 @@ const TableHead: FC<Props> = ({ headerGroups = [] }) => {
               }}
             >
               {column.render("Header")}
-              <chakra.span pl="1.5">
+              <chakra.span paddingLeft={1.5}>
                 {column.isSorted &&
                   (column.isSortedDesc ? (
                     <TriangleDownIcon

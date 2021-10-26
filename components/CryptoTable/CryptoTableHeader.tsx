@@ -40,8 +40,10 @@ const CryptoTableHeader: FC<Props> = ({
       </Flex>
 
       <ApiStatusSwitch
-        onChangeApiStatus={onChangeApiStatus}
+        marginTop={1}
+        marginLeft={{ base: 2, md: 0 }}
         isApiEnabled={isApiEnabled}
+        onChangeApiStatus={onChangeApiStatus}
       />
     </>
   );

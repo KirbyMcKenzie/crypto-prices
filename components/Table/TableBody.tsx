@@ -6,21 +6,21 @@ import {
   Skeleton,
   SkeletonProps,
   SkeletonCircle,
-  Text,
   Tbody,
   Td,
   Tr,
 } from "@chakra-ui/react";
 import { Row, TableBodyPropGetter, TableBodyProps } from "react-table";
 
+type GetTableBodyPropsType = (
+  propGetter?: TableBodyPropGetter<object> | undefined
+) => TableBodyProps;
+
 export interface Props {
-  error?: string;
+  isLoading?: boolean;
   page: Row<object>[];
   perPage?: number;
-  isLoading?: boolean;
-  getTableBodyProps?: (
-    propGetter?: TableBodyPropGetter<object> | undefined
-  ) => TableBodyProps;
+  getTableBodyProps?: GetTableBodyPropsType;
   prepareRow?: (row: Row<object>) => void;
 }
 
@@ -31,10 +31,9 @@ const SkeletonTd = ({ ...props }: SkeletonProps) => (
 );
 
 const TableBody: FC<Props> = ({
-  error,
+  isLoading = true,
   page = [],
   perPage = 10,
-  isLoading = true,
   getTableBodyProps = () => {},
   prepareRow = () => {},
 }) => {
