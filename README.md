@@ -1,3 +1,7 @@
+# Crypto Prices
+
+Built with React, TypeScript, Next.js and Chakra UI
+
 **🕺 Live demo - https://crypto-prices-kirbymckenzie.vercel.app**
 
 ## Getting Started
