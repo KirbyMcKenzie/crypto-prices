@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   return (
     <div>
       <Head>
-        <title>{"Caleb and Brown - Coding Challenge"}</title>
+        <title>{"Crypto by Market Cap in the past 24 hours"}</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
