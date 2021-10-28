@@ -1,4 +1,4 @@
-**🕺 Live demo - https://cb-coding-challenge-kirbymckenzie.vercel.app/**
+**🕺 Live demo - https://crypto-prices-kirbymckenzie.vercel.app**
 
 ## Getting Started
 
